@@ -5,6 +5,11 @@ import "fmt"
 // TestVersion is a test version.
 const TestVersion = 2
 
+const (
+	minPerHour = 60
+	hourPerDay = 24
+)
+
 // Clock handles times without dates.
 //
 // A Clock is able to add and subtract minutes to it.
@@ -17,18 +22,28 @@ type Clock struct {
 
 // Time creates a Clock holding hours and minutes.
 func Time(hour, minutes int) Clock {
-	d, m := minutes/60, minutes%60
-	if minutes < 0 {
-		d -= 1
-		m += 60
+	if minutes < 0 || minutes >= minPerHour {
+		n := minutes / minPerHour
+		hour += n
+		minutes -= n * minPerHour
+
+		if minutes < 0 {
+			minutes += minPerHour
+			hour--
+		}
 	}
-	h := hour%24 + d
-	if h < 0 {
-		h += 24
+
+	if hour < 0 || hour >= hourPerDay {
+		hour %= hourPerDay
+
+		if hour < 0 {
+			hour += hourPerDay
+		}
 	}
+
 	return Clock{
-		hour: h,
-		min:  m,
+		hour: hour,
+		min:  minutes,
 	}
 }
 
