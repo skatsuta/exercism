@@ -56,7 +56,22 @@ func (c Clock) String() string {
 // Add also handle subtraction by accepting negative values.
 // Values of Clock type work with the == operator.
 func (c Clock) Add(minutes int) Clock {
-	s := c.min + minutes
-	d, m := s/60, s%60
-	return Time(c.hour+d, m)
+	c.hour += minutes / minPerHour
+	m := c.min + minutes%minPerHour
+	if m >= minPerHour {
+		c.hour++
+		m -= minPerHour
+	} else if m < 0 {
+		c.hour--
+		m += minPerHour
+	}
+	c.min = m
+
+	if c.hour >= hourPerDay {
+		c.hour %= hourPerDay
+	} else if c.hour < 0 {
+		c.hour += hourPerDay
+	}
+
+	return c
 }
