@@ -22,3 +22,8 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+.envrc
+
+# Ignore all languages by default
+**/*
