@@ -75,3 +75,11 @@ func BenchmarkCreateClock(b *testing.B) {
 		}
 	}
 }
+
+func BenchmarkAddMinutes(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		for _, a := range addTests {
+			Time(a.h, a.m).Add(a.a)
+		}
+	}
+}
