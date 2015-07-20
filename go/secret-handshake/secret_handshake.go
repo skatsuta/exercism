@@ -21,12 +21,12 @@ func Handshake(n int) []string {
 		reverse = true
 	}
 
-	l := uint64(len(handshakes))
+	l := len(handshakes)
 	h := make([]string, 0, l)
 	for i := range ints {
 		e := ints[i]
 		if reverse {
-			e = ints[int(l)-1-i]
+			e = ints[l-1-i]
 		}
 		if v, exists := handshakes[n&e]; exists {
 			h = append(h, v)
