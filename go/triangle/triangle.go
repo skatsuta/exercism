@@ -1,9 +1,6 @@
 package triangle
 
-import (
-	"math"
-	"sort"
-)
+import "math"
 
 // Kind is a kind of a triangle.
 type Kind int
@@ -21,29 +18,26 @@ const (
 
 // KindFromSides return a kind of a tringle from the lengths of 3 sides.
 func KindFromSides(a, b, c float64) Kind {
-	// sort 3 sides
-	s := []float64{a, b, c}
-	sort.Float64Slice(s).Sort()
-
-	// check to contain NaN or infinity
-	for _, e := range s {
-		if math.IsInf(e, 0) || math.IsNaN(e) {
-			return NaT
-		}
-	}
-
-	// check to satisfy the triangle inequality
-	if s[0]+s[1] <= s[2] {
+	switch {
+	case isNeg(a, b, c) || isNaN(a, b, c) || isNotTriangle(a, b, c):
 		return NaT
-	}
-
-	if s[0] != s[1] && s[1] != s[2] {
+	case a == b && a == c:
+		return Equ
+	case a == b || b == c || c == a:
+		return Iso
+	default:
 		return Sca
 	}
+}
 
-	if s[0] == s[2] {
-		return Equ
-	}
+func isNeg(a, b, c float64) bool {
+	return a <= 0 || b <= 0 || c <= 0
+}
 
-	return Iso
+func isNaN(a, b, c float64) bool {
+	return math.IsNaN(a) || math.IsNaN(b) || math.IsNaN(c)
+}
+
+func isNotTriangle(a, b, c float64) bool {
+	return a+b <= c || a+c <= b || b+c <= a
 }
