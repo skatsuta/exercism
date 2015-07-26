@@ -2,6 +2,8 @@ package raindrops
 
 import (
 	"bytes"
+	"fmt"
+	"os"
 	"strconv"
 )
 
@@ -19,9 +21,11 @@ var (
 //   just pass the number's digits straight through.
 func Convert(n int) string {
 	var buf bytes.Buffer
-	for i := 0; i < len(primes); i++ {
-		if n%primes[i] == 0 {
-			_, _ = buf.WriteString(words[i])
+	for i, prime := range primes {
+		if n%prime == 0 {
+			if _, e := buf.WriteString(words[i]); e != nil {
+				fmt.Fprintf(os.Stderr, e.Error())
+			}
 		}
 	}
 
