@@ -1,15 +1,11 @@
 package raindrops
 
-import (
-	"bytes"
-	"fmt"
-	"os"
-	"strconv"
-)
+import "strconv"
 
 var (
 	primes = [...]int{3, 5, 7}
-	words  = [...]string{"Pling", "Plang", "Plong"}
+	words  = [...][]byte{[]byte("Pling"), []byte("Plang"), []byte("Plong")}
+	maxLen = 15
 )
 
 // Convert returns a string, the contents of which depends on the number's prime factors.
@@ -20,17 +16,15 @@ var (
 // - If the number does not contain 3, 5, or 7 as a prime factor,
 //   just pass the number's digits straight through.
 func Convert(n int) string {
-	var buf bytes.Buffer
+	buf := make([]byte, 0, maxLen)
 	for i, prime := range primes {
 		if n%prime == 0 {
-			if _, e := buf.WriteString(words[i]); e != nil {
-				fmt.Fprintf(os.Stderr, e.Error())
-			}
+			buf = append(buf, words[i]...)
 		}
 	}
 
-	if buf.Len() == 0 {
+	if len(buf) == 0 {
 		return strconv.Itoa(n)
 	}
-	return buf.String()
+	return string(buf)
 }
