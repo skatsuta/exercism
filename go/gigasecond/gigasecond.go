@@ -13,5 +13,5 @@ const Gigasecond = 1e9
 
 // AddGigasecond returns a Time added with 1 Gs.
 func AddGigasecond(in time.Time) time.Time {
-	return in.Add(time.Duration(Gigasecond * time.Second))
+	return in.Add(Gigasecond * time.Second)
 }
